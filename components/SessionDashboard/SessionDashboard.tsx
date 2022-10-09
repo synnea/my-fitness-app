@@ -1,22 +1,35 @@
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useSessionDashboard } from "./useSessionDashboard";
+import Exercises from "../Exercises/Exercises";
 
 function SessionDashboard() {
-  const APPLICATION_ID = "cp24NUflxN3lZ6TsvlbsFikjwwUUMXMp0ywZ0iTJ";
-  const JAVASCRIPT_KEY = "Kj60BShDs0Kli0K8RVP3F8urruSAkNukvTAr4xlD";
+  const { exercises = [] } = useSessionDashboard();
 
-  useSessionDashboard();
   return (
-    <View>
+    <View style={styles.exerciseContainer}>
       <Text>Let's work out</Text>
-      <View>
+      <View style={styles.exerciseType}>
         <Text>Cardio</Text>
       </View>
       <View>
-        <Text>Strength</Text>
+        <Text style={styles.exerciseType}>Strength</Text>
+        <Exercises exercises={exercises} />
       </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  exerciseType: {
+    flex: 2,
+  },
+  exerciseContainer: {
+    flex: 1,
+    width: "100%",
+    justifyContent: "center",
+    paddingTop: 100,
+    alignItems: "center",
+  },
+});
 
 export default SessionDashboard;

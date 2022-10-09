@@ -1,19 +1,26 @@
 import keys from "../../constants/keys";
 import setupServer from "../../utils/serverUtils";
 import Parse from "parse/react-native.js";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { IExercise } from "../../constants/types";
 
+async function fetchExercises() {
+  let query = new Parse.Query("exercises");
+  let queryResult = await query.findAll();
+
+  const objectResult = JSON.parse(JSON.stringify(queryResult)) as IExercise[];
+
+  console.log(objectResult, "objectResult");
+
+  if (queryResult) return objectResult;
+}
 function useSessionDashboard() {
-  async function fetchExercises() {
-    //create your Parse Query using the Person Class you've created
-    let query = new Parse.Query("exercises");
-    //run the query to retrieve all objects on Person class, optionally you can add your filters
-    let queryResult = await query.findAll();
-    //pick the first result
-    console.log(queryResult, "queryResult");
-  }
+  const queryClient = useQueryClient();
 
-  fetchExercises();
+  const { data: exercises } = useQuery(["exercises"], fetchExercises);
+
+  return { exercises };
 }
 
 export { useSessionDashboard };
